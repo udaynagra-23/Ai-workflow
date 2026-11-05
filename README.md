@@ -19,6 +19,8 @@ A reusable, human-approved YouTube production system. **Long-form videos are the
 ## Source of truth
 - `workflow/OPERATING_RULES.md` — operating rules and approval policy.
 - `workflow/PRODUCTION_ENGINE.md` — full production pipeline and quality gates.
+- `workflow/SCRIPT_ENGINE.md` — research-grounded long-form scripting system.
+- `workflow/THUMBNAIL_ENGINE.md` — selected thumbnail formula, concept workflow, and review checklist.
 - `workflow/PROJECT_STATE.md` — current project, status, next action, and blockers.
 - `workflow/DECISIONS.md` — user-approved durable decisions.
 - `templates/` — reusable briefs, handoffs, approval checks, storyboards, and visual templates.
@@ -33,7 +35,7 @@ A reusable, human-approved YouTube production system. **Long-form videos are the
 6. Update state and commit useful work before ending.
 
 ## Human control
-Ask before changing the core topic, audience promise, story angle, major approved script direction, overall visual style, narrator/voice direction, removing important scenes, spending money/credits, final credit-consuming render, or publishing. Routine reversible improvements should proceed and be logged.
+Human verification is required at every major stage: brief, research/story, script, thumbnail concept, final thumbnail, major visual direction, storyboard/assets, preview, final QA/cut, and post-publish learning. Ask before changing the core topic, audience promise, story angle, major approved script direction, overall visual style, narrator/voice direction, removing important scenes, spending money/credits, final credit-consuming render, or publishing. Routine reversible improvements should proceed, be logged, and be rechecked.
 
 ## Honest capability boundary
 GitHub does not run the engines in the background or synchronize unsaved work. Each engine must have repository access and commit its changes. Never claim a HyperFrames project was composed or rendered unless the active integration confirms it. Never claim audio was repaired unless an audio tool actually processed it. Track asset sources and rights.
