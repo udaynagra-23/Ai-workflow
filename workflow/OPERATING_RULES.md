@@ -1,74 +1,74 @@
 # Operating Rules
 
-## 1. Roles
-- **Claude:** production engine A. Can research, plan, draft, inspect files, and implement approved changes when its tools/access are available.
-- **ChatGPT:** production engine B and full fallback. Must be able to resume using GitHub files and the connected GitHub tools, without relying on Claude's chat history.
+## 1. Roles and source of truth
+- **ChatGPT and Claude:** interchangeable production engines when their tools and repository permissions are available.
 - **User:** creative director and final approver for consequential decisions.
-- **GitHub:** canonical shared memory and project record.
-- **HyperFrames:** composition/rendering destination when its integration is available.
+- **GitHub:** canonical shared memory; committed files outrank assumptions or stale chat context.
+- **HyperFrames:** composition/rendering destination only when its integration is available and verified.
 
-Neither AI is the owner of the project. The committed repository is the source of truth.
+Claude is optional. ChatGPT must be able to continue from the latest committed repository state. Engine fallback is manual, not an automatic background failover.
 
-## 2. Required startup routine
-At the start of every session:
-1. Read `README.md`.
-2. Read `workflow/PROJECT_STATE.md`.
-3. Read `workflow/DECISIONS.md`.
-4. Inspect the active video's folder and latest committed changes.
-5. Report the current stage, last completed task, next task, and any blocker in a few lines.
-6. Continue from the next task; do not ask the user to repeat facts already recorded.
+## 2. Long-form-first mandate
+Prioritize high-quality long-form YouTube content. Default canvas is 16:9 unless the brief says otherwise. Shorts are secondary derivatives, not the primary design constraint. Build depth, narrative continuity, chapter structure, strong visual explanations, and a satisfying payoff. Avoid filler, repetitive stock footage, unnecessary transitions, and effects that compete with the story.
 
-## 3. Automatic fallback
-If Claude is rate-limited, unavailable, or the user chooses ChatGPT:
-1. ChatGPT reads the repository's latest committed state.
-2. ChatGPT checks for uncommitted or missing work described in the handoff.
-3. ChatGPT resumes the next incomplete task.
-4. ChatGPT preserves approved scripts, assets, naming, style, and decisions.
-5. ChatGPT updates the state and commits progress.
-6. When Claude becomes available, it must read the latest state before doing anything. It must not overwrite newer work.
+## 3. Startup routine
+1. Read README, PROJECT_STATE, DECISIONS, and PRODUCTION_ENGINE.
+2. Inspect the active video's brief, research, script, storyboard, assets manifest, and latest changes.
+3. Report stage, completed work, next action, and blockers briefly.
+4. Resume from the exact next incomplete task.
+5. Reuse approved templates and feedback without asking the user to repeat them.
 
-Fallback is a manual engine switch, not an automatic background failover. The user can simply say: **"Claude limit reached. Continue from GitHub."**
+## 4. One-run execution
+Complete all independent and reversible production work in one coordinated run. Do not stop to ask about routine wording, formatting, timing corrections, file organization, or other obvious reversible improvements. Make sensible documented defaults where safe. Keep a checklist and recheck the completed work before reporting.
 
-## 4. Approval policy
-### Ask first
-Get explicit user approval before:
-- Changing the core topic, promise, audience, or story angle.
-- Making a major script rewrite after the user approved a version.
-- Choosing or changing the overall animation/visual style.
-- Choosing a narrator identity/voice direction or materially changing narration.
-- Removing important scenes or changing the ending.
-- Starting a paid service, using paid credits, or incurring a cost.
-- Performing a final render when it consumes limited credits, or publishing/uploading.
-- Replacing or deleting user-approved assets.
+Pause only when:
+- A critical brief detail is missing and cannot be safely assumed.
+- The core story angle, audience promise, or topic needs user choice.
+- A major rewrite changes an approved script.
+- The overall visual identity or narrator/voice direction needs approval.
+- An important scene or ending would be removed or fundamentally changed.
+- Paid services/credits or costs are involved.
+- A final render consumes limited credits or publishing is requested.
+- An integration, asset, rights, or technical blocker prevents honest completion.
 
-### Proceed and log
-No approval needed for ordinary, reversible improvements such as:
-- Fixing spelling, grammar, timing notes, and obvious pronunciation issues.
-- Suggesting alternate hooks or captions without replacing approved copy.
-- Organizing files, creating manifests, checking consistency, and reporting errors.
-- Making a reversible technical correction that preserves the approved creative direction.
+Never treat silence as approval for consequential decisions. Present the best recommendation and ask one focused question at a time.
 
-If uncertain whether a change is consequential, ask.
+## 5. Production sequence
+Idea → research and source verification → narrative outline → script → script review → narration plan → detailed storyboard → asset manifest and rights checks → visual direction/template mapping → composition → preview → independent QA pass → revisions → final approval → final render/export → user publishing.
 
-## 5. Narration and audio
-The user may provide or record narration. AI can review a transcript and suggest corrections, identify unclear wording, flag pacing/pronunciation issues, and recommend audio cleanup. Do not claim audio has been repaired unless an audio tool actually processed it. Preserve the user's intended delivery.
+Do not skip a stage just because the project is in a single run. A planned stage is not a completed stage.
 
-## 6. Session close / handoff
-Before ending a session:
-- Save all useful work to GitHub.
-- Update `workflow/PROJECT_STATE.md` with stage, completed work, next action, blockers, and active file paths.
-- Add approved durable decisions to `workflow/DECISIONS.md`.
-- Note any uncommitted changes or external assets that are not in GitHub.
-- Provide the user a concise summary and the exact next step.
+## 6. Template and animation reuse
+- Search the existing scene and animation libraries before designing a new pattern.
+- Reuse approved templates by stable ID and adapt only story-specific fields.
+- Preserve established visual identity across the video.
+- Do not use an effect just because it exists; it must improve comprehension, emotion, or pacing.
+- Version reusable templates instead of silently changing approved ones.
+- Record template IDs used and lessons learned in the video's production notes.
 
-## 7. Conflict prevention
-- Pull/read the latest repository state before editing.
+## 7. Quality review and recheck
+Every video receives a separate QA pass after composition or storyboard completion. Check:
+- Story promise, logic, factual accuracy, sources, and payoff.
+- Hook, chapter progression, pacing, repetition, and transitions.
+- Narration clarity, pronunciation, pacing, and audio balance.
+- Visual relevance, continuity, legibility, framing, and motion consistency.
+- Caption accuracy and timing.
+- Asset availability, provenance, and usage rights.
+- Export aspect ratio, resolution, frame rate, and audio settings against the brief.
+- Missing media, placeholders, accidental blank frames, and abrupt cuts.
+
+Log each issue with severity, scene ID, proposed fix, and status. Recheck every fix. Do not claim a preview/render was visually inspected if no preview was available.
+
+## 8. Narration and audio
+The user may record narration. AI can review text/audio when supplied and supported, flag unclear wording, pronunciation, pacing, noise, clipping, and level inconsistencies, and recommend edits. Do not claim repaired audio unless a real audio tool processed it.
+
+## 9. User feedback memory
+Treat explicit corrections and preferences as important. Separate one-off notes from durable production rules. Record durable approved preferences in DECISIONS.md; record video-specific feedback in that video's notes. Ask if the scope of a preference is unclear.
+
+## 10. Session close and conflict prevention
+- Read latest GitHub state before editing.
 - Do not let both engines edit the same file simultaneously.
-- Make focused commits with descriptive messages.
-- Never replace a newer file with an older local copy.
-- If a conflict occurs, stop and reconcile; do not force-push or discard work.
-
-## 8. Production stages
-Idea → research → brief → script → user approval → narration → storyboard/scene plan → visual direction approval → asset preparation → HyperFrames composition → preview review → revisions → final render approval → final export → user upload/publishing.
-
-Stages can be adapted per video, but approval gates must be respected.
+- Use focused commits; never force-push or overwrite newer work.
+- Update PROJECT_STATE with completed work, next action, blockers, and file paths.
+- Record durable approved decisions and note assets not committed to GitHub.
+- Never claim integration access, render completion, audio processing, or asset licensing without verification.
