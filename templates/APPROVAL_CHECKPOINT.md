@@ -1,19 +1,20 @@
 # Approval Checkpoint
 
 **Video ID:**  
+**Stage:**  
 **Decision needed:**  
 **Why this matters:**  
 
 ## Recommended option
-- 
+- Recommendation:
+- Reason:
+- Effect on story, quality, time, and cost:
 
 ## Alternatives
-- 
-
-## What changes depending on the choice
-- 
+- Option:
+- Trade-off:
 
 **Approval required:** Yes / No  
 **User decision:** Pending
 
-Do not treat silence as approval for a consequential change. Record the user's explicit decision in `workflow/DECISIONS.md` or the video's brief.
+Ask one focused question. Do not interrupt for routine reversible corrections. Do not treat silence as approval for a consequential decision. Record explicit durable decisions in `workflow/DECISIONS.md` and video-specific decisions in the brief/production notes.
