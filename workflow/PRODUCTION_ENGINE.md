@@ -37,32 +37,37 @@ Run every video through one repeatable, quality-controlled pipeline. The engine 
 - Fact-check important claims and distinguish evidence from interpretation.
 
 ## Script engine
-Use `workflow/SCRIPT_ENGINE.md` as the required long-form scripting playbook. It defines evidence-first research, packaging alignment, story-structure selection, hook and chapter design, open-loop tracking, spoken-language drafting, visual scripting, and post-publish analytics feedback. Do not apply every formula to every topic; select only structures that naturally fit the material.
+Use `workflow/SCRIPT_ENGINE.md` as the required long-form scripting playbook. It defines evidence-first research, story-structure selection, hook and chapter design, open-loop tracking, spoken-language drafting, visual scripting, and post-publish analytics feedback. Use `workflow/THUMBNAIL_ENGINE.md` for the title-thumbnail package, concept selection, asset checks, human review, and post-publish learning. Do not apply every formula to every topic; select only structures that naturally fit the material.
 
-## Quality gates
+## Quality gates and human verification
+Every major stage produces a reviewable artifact and receives a human verification checkpoint before it is treated as accepted. The user can review grouped deliverables in one checkpoint; do not interrupt for every small edit. Record `pending`, `approved`, `changes requested`, or `not applicable` for each checkpoint. Never treat silence as approval.
+
 ### Gate A — Brief
-Confirm topic, audience, viewer promise, format, target duration, tone, and constraints. Ask only for missing decisions that materially affect the result.
+Confirm topic, audience, viewer promise, format, target duration, tone, and constraints. Ask only for missing decisions that materially affect the result. **Human verification:** confirm the topic, intended viewer, and promise before research is locked.
 
 ### Gate B — Research and story
-Check important facts and sources. Build a coherent narrative. Flag uncertainty and avoid unsupported claims.
+Check important facts and sources. Build a coherent narrative. Flag uncertainty and avoid unsupported claims. **Human verification:** show the outline, key evidence, uncertainties, and story angle; obtain approval before committing to a materially consequential framing.
 
 ### Gate C — Script
-Write narration in natural spoken language. Include visual intent alongside each section. Review hook, clarity, pacing, repetition, transitions, and ending.
+Write narration in natural spoken language. Include visual intent alongside each section. Review hook, clarity, pacing, repetition, transitions, and ending. **Human verification:** present the complete script and major visual intentions for review. Do not proceed with an unapproved major rewrite or a materially changed story promise.
 
-### Gate D — User approval
-Ask before changing the core angle, audience promise, major story structure, or substantially rewriting an approved script.
+### Gate D — Packaging and thumbnail
+Use `workflow/THUMBNAIL_ENGINE.md`. Develop distinct title-thumbnail concepts from the verified story, recommend one, and show the actual rendered image for inspection. **Human verification:** approve the concept and title pairing before final image production, then approve the actual final image before upload.
 
 ### Gate E — Visual direction
-Select from existing approved templates first. If a new overall visual style is needed, present a concise proposal and get approval before committing to it.
+Select from existing approved templates first. If a new overall visual style is needed, present a concise proposal and get approval before committing to it. **Human verification:** confirm any new overall visual identity or major change.
 
 ### Gate F — Storyboard and assets
-Create a scene-by-scene plan with narration, visual, on-screen text, motion, duration, sound, and asset requirements. Track asset source, rights/licensing status, and status in the manifest.
+Create a scene-by-scene plan with narration, visual, on-screen text, motion, duration, sound, and asset requirements. Track asset source, rights/licensing status, and status in the manifest. **Human verification:** review the full storyboard and any rights-sensitive or likeness-sensitive assets before they are committed to the edit.
 
 ### Gate G — Composition and preview
-Implement only with tools actually available in the current session. Inspect preview for timing, legibility, continuity, visual hierarchy, audio balance, and export framing. Record issues and fixes.
+Implement only with tools actually available in the current session. Inspect preview for timing, legibility, continuity, visual hierarchy, audio balance, and export framing. Record issues and fixes. **Human verification:** show a representative preview or complete reviewable cut; verify major creative execution before final QA.
 
-### Gate H — Final approval
-Show the final review checklist and obtain approval before a credit-consuming final render or publishing. Never publish automatically.
+### Gate H — Independent QA and final approval
+Run independent QA, fix issues, and recheck every fix. Show the final review checklist and obtain approval before a credit-consuming final render or publishing. **Human verification:** user checks the final cut, title, thumbnail, and export intent. Never publish automatically.
+
+### Gate I — Publish and learn
+Publishing is a separate user action. After publication, review available analytics and recommend changes; do not silently alter approved reusable rules. **Human verification:** review proposed lessons before promoting them into permanent channel standards.
 
 ## Reuse engine
 For every new video:
