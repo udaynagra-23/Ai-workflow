@@ -3,35 +3,48 @@
 **Date/time:**  
 **From engine:**  
 **To engine:**  
-**Reason:** (e.g. usage limit, tool unavailable, user preference)
+**Reason:**  
 
 ## Current project
 - Video ID:
+- Format and target duration:
 - Current stage:
 - Latest commit:
 - Active files:
 
-## Completed
-- 
+## User-approved direction — preserve
+- Story promise and angle:
+- Script version:
+- Visual identity/version:
+- Narration direction:
+- Approved assets:
+- Scene and animation template IDs:
 
-## Approved and must not be changed without asking
-- 
+## Completed in this run
+- Research:
+- Outline/script:
+- Storyboard:
+- Asset plan:
+- Composition/preview:
+- QA and recheck:
 
-## In progress
-- 
+## Open issues and blockers
+| Severity | Scene/file | Issue | Required action | Status |
+|---|---|---|---|---|
 
 ## Exact next action
-1. 
+1.
 
-## Open questions / blockers
-- 
+## External assets not committed
+- Asset:
+- Source/licence:
+- Local location or access notes:
 
-## Assets not committed to GitHub
-- 
-
-## Checks for receiving engine
-- [ ] Read README and operating rules
+## Receiving engine checklist
+- [ ] Read README and all workflow rules
 - [ ] Read project state and decisions
-- [ ] Inspect latest commit and active files
-- [ ] Preserve approved work
-- [ ] Update project state after continuing
+- [ ] Inspect latest commit and active video folder
+- [ ] Preserve approved work and template versions
+- [ ] Resolve the highest-priority open issue first
+- [ ] Recheck fixes
+- [ ] Update project state and commit
