@@ -1,23 +1,23 @@
-# Reusable HyperFrames Templates
+# Reusable Visual and Motion Templates
 
-This folder is reserved for reusable composition patterns and project templates.
+This folder contains renderer-neutral reusable specifications. They become actual HyperFrames project templates only after implementation and preview in a connected, working HyperFrames environment.
 
-Build and maintain reusable templates for:
-- Opening hook / title reveal
-- Talking-head or narration-led scene
-- Explainer / diagram scene
-- App or product demonstration
-- B-roll with captions
-- Transition and ending / call to action
-- Subtitle and lower-third styles
+## Libraries
+- `SCENE_TEMPLATE_LIBRARY.md` — reusable scene blueprints.
+- `ANIMATION_PATTERN_LIBRARY.md` — motion patterns and timing guidance.
+- `LONG_FORM_MASTER_TEMPLATE.md` — long-form structure and reusable scene sequence.
+- `VISUAL_IDENTITY_PROPOSAL.md` — proposed master visual identity awaiting user approval.
 
-For each template, document:
-- Intended use and duration
-- Editable text/media fields
-- Animation and timing rules
-- Audio behavior
-- Aspect ratio and export assumptions
-- Required assets
-- Preview and approval status
+## Implementation rules
+For each actual renderer template, record:
+- Stable ID and version.
+- Intended use and duration.
+- Editable text/media fields.
+- Animation and timing rules.
+- Audio behavior.
+- Aspect ratio and export assumptions.
+- Required assets and licensing/source notes.
+- HyperFrames project/template reference, if confirmed.
+- Preview and approval status.
 
-Do not invent HyperFrames project syntax or claim a template has been imported/rendered until the connected tool confirms it.
+Do not invent HyperFrames project syntax or claim a template has been imported, composed, or rendered until the connected tool confirms it. Keep renderer-neutral creative specifications separate from executable project files.
