@@ -36,6 +36,9 @@ Run every video through one repeatable, quality-controlled pipeline. The engine 
 - Plan retention intentionally: open loops must be resolved; chapter endings should create a natural reason to continue.
 - Fact-check important claims and distinguish evidence from interpretation.
 
+## Script engine
+Use `workflow/SCRIPT_ENGINE.md` as the required long-form scripting playbook. It defines evidence-first research, packaging alignment, story-structure selection, hook and chapter design, open-loop tracking, spoken-language drafting, visual scripting, and post-publish analytics feedback. Do not apply every formula to every topic; select only structures that naturally fit the material.
+
 ## Quality gates
 ### Gate A — Brief
 Confirm topic, audience, viewer promise, format, target duration, tone, and constraints. Ask only for missing decisions that materially affect the result.
