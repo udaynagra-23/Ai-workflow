@@ -18,10 +18,12 @@ The strongest practical signals from the research reviewed:
 Before outlining:
 1. Define the target viewer in one sentence: what they know, want, wonder about, or misunderstand.
 2. Define the video's central promise: what will the viewer understand or discover by the end?
-3. Draft a provisional title/thumbnail concept. It is a promise test, not a final lock.
+3. Draft a provisional title/thumbnail concept using `workflow/THUMBNAIL_ENGINE.md`. It is a promise test, not a final lock.
 4. Make sure the first 30 seconds visibly and verbally deliver on that promise.
 5. Capture the user's own ideas, examples, boundaries, and opinions. Never replace them with invented preferences.
 6. Set a realistic target runtime and narration style.
+
+**Human verification checkpoint:** before research/story framing is locked, show the user the brief, central promise, and provisional packaging direction. After drafting, present the complete script, story structure, research uncertainties, and major visual intentions for human review. Record `approved`, `changes requested`, or `pending`. Do not treat silence as approval or proceed past a requested major rewrite without re-review.
 
 If a critical choice is missing, make a clearly labelled safe assumption where possible. Ask the user only when the missing decision materially changes the story.
 
@@ -193,7 +195,7 @@ Before storyboard approval, review the script as a critical editor:
 - Can any section be shortened without losing meaning?
 - Are there repeated explanations, unsupported claims, filler, or generic AI-sounding phrases?
 
-Revise, then recheck the revised script. Report remaining concerns honestly.
+Revise, then recheck the revised script. Report remaining concerns honestly. **Human verification:** the user verifies the final script and its promise before the storyboard and thumbnail are treated as locked. Any later material rewrite reopens this checkpoint.
 
 ## 14. Post-publish learning loop
 
