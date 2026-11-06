@@ -19,7 +19,7 @@ The job uses a public Ubuntu 24.04 runner, Node.js 22, FFmpeg/FFprobe and the pi
 - The renderer produces a non-empty MP4.
 - FFprobe confirms approximately 10 seconds, 1920×1080 and 30 fps.
 
-The generated blank template uses HyperFrames' default pinned GSAP browser script from jsDelivr. This is a public library dependency, not hosted rendering or paid media generation. The workflow does not sign in to HeyGen or invoke credit-consuming services.
+The blank scaffold loads the upstream pinned GSAP browser script from jsDelivr. This is a public library dependency, not hosted rendering or paid media generation. The workflow does not sign in to HeyGen or invoke credit-consuming services.
 
 ## What it does not prove
 
@@ -31,4 +31,4 @@ The repository is public. The workflow uploads only the synthetic smoke-test MP4
 
 ## Next milestone
 
-After a successful run, inspect the MP4 and representative frames. Then build a separate 60–90-second synthetic calibration with a few distinct motion types and captions. Record measured render time, peak memory, disk usage and output size before deciding the production architecture.
+After a successful run, inspect the MP4 and representative frames. Then build a separate 60–90-second synthetic calibration with representative motion and captions. Record measured render time, peak memory, disk usage and output size before deciding the production architecture.
