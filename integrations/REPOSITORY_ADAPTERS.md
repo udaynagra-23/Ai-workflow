@@ -62,3 +62,39 @@ Both upstream repositories are separate projects. Keep their source checkouts ou
 - No generated video has been produced by either upstream project in this session.
 - No direct adapter between either project and HyperFrames exists yet.
 - Free-tier availability, API quotas, and current provider prices have not been verified and must not be assumed.
+
+
+## Narration repository
+
+### Selected candidate: [remsky/Kokoro-FastAPI](https://github.com/remsky/Kokoro-FastAPI)
+
+**Role:** self-hosted narration service for approved ThinkVerse scripts.
+
+- Uses the Kokoro-82M text-to-speech model and exposes an OpenAI-compatible speech API.
+- README documents English (US/GB) and other languages, multiple voices, MP3/WAV and other audio formats, and word/chunk timestamps for caption synchronization.
+- Can run as a CPU Docker service; GPU variants are available but are not required for the initial feasibility check.
+- Server project license: Apache-2.0. The linked Kokoro model is separately identified as Apache-2.0 in the Kokoro-ONNX project documentation; verify the exact model card and voice/model terms at the time of deployment.
+- This is a self-hosted option, not a guarantee of zero compute cost: it requires CPU/RAM, model download, storage, and render time. Codespaces resource limits may make long narration slow or impractical.
+
+**Why this candidate:** its HTTP API and timestamps make it easier to connect narration output to the existing scene-based workflow than a standalone TTS script. It also avoids requiring a paid narration API for every test.
+
+**Narration adapter contract**
+
+1. Input only the user-approved script, split into stable scene/paragraph IDs.
+2. Preserve wording exactly unless the user approves a script revision.
+3. Generate audio per scene or paragraph so a bad take can be regenerated without rerunning the whole narration.
+4. Save WAV or MP3 plus a manifest containing scene ID, voice ID, language/accent, duration, sample rate, and timestamps when available.
+5. Run audio checks: file exists, duration is nonzero, no clipped/empty output, scene order is correct, and audio can be decoded.
+6. Let HyperFrames consume the approved audio assets and timing manifest. No direct HyperFrames integration is claimed until an adapter is implemented and tested.
+7. Keep ElevenLabs as an optional provider/fallback using the user's existing account/credits; do not store API keys in GitHub.
+8. Voice choice must be auditioned and approved. The target is natural conversational American-English male narration; do not assume a particular Kokoro voice is equivalent to the previously preferred ElevenLabs voice.
+
+**Installation/test boundary**
+
+- Do not install the full service into the root AI-workflow environment.
+- First inspect current Docker CPU image requirements, model download size, RAM use, and license/model-card details.
+- Test a short approved sample in an isolated Codespaces environment or another machine with sufficient resources.
+- Compare pronunciation, pacing, expressiveness, accent, audio quality, and generation time against the existing ElevenLabs voice.
+- Do not enable automatic publishing or let narration generation silently alter the approved script.
+
+**Not yet verified:** Kokoro-FastAPI has been inspected at the README, project manifest, and Apache-2.0 license level only. It has not been cloned, installed, run, connected to HyperFrames, or used to produce a ThinkVerse narration sample.
