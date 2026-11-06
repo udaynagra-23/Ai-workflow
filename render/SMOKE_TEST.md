@@ -1,4 +1,4 @@
-# HyperFrames smoke setup workflow
+# HyperFrames synthetic MP4 smoke test
 
 Workflow: `.github/workflows/hyperframes-smoke.yml`
 
@@ -6,23 +6,29 @@ Workflow: `.github/workflows/hyperframes-smoke.yml`
 
 1. Open the repository on GitHub.
 2. Select **Actions**.
-3. Select **HyperFrames local-renderer smoke setup**.
-4. Select **Run workflow** on the intended branch.
+3. Select **HyperFrames synthetic MP4 smoke test**.
+4. Select **Run workflow** on the branch containing this workflow.
 
-It is manual-only and uses a public GitHub-hosted runner. It installs Node.js 22, FFmpeg and the pinned open-source HyperFrames CLI v0.9.19, initializes an isolated synthetic project, and requests local browser setup.
+The job uses a public Ubuntu 24.04 runner, Node.js 22, FFmpeg/FFprobe and the pinned open-source HyperFrames CLI v0.9.19. It initializes the upstream blank 1920×1080, 30 fps, 10-second scaffold, installs the pinned local browser, runs lint/check, renders a synthetic MP4 and validates its metadata.
 
-## What it proves
+## What a green run proves
 
-A successful run proves that the CLI can be installed and its setup/browser commands complete on that runner. Review the logs, especially the doctor output and browser installation.
+- The pinned CLI installs on the GitHub runner.
+- The generated blank project passes lint and check.
+- Local Chrome/browser setup works.
+- The renderer produces a non-empty MP4.
+- FFprobe confirms approximately 10 seconds, 1920×1080 and 30 fps.
+
+The generated blank template uses HyperFrames' default pinned GSAP browser script from jsDelivr. This is a public library dependency, not hosted rendering or paid media generation. The workflow does not sign in to HeyGen or invoke credit-consuming services.
 
 ## What it does not prove
 
-It does not render an MP4, validate a finished composition, measure long-video performance, or establish private asset delivery. Do not describe this as an end-to-end render test.
+It does not approve a visual style, validate the user's final character design, complex animation patterns, voice/audio, captions, long-form performance, or private asset delivery. It is a technical smoke test only.
 
-## Privacy and cost boundary
+## Artifact and privacy
 
-The repository is public. Workflow logs are visible to people who can read the repository. This workflow contains no secrets and uses no user production assets. It does not upload artifacts or publish videos. Do not add private scripts, footage, voice recordings, credentials or final videos to this public repository.
+The repository is public. The workflow uploads only the synthetic smoke-test MP4 as a GitHub Actions artifact for three days. Treat workflow logs and artifacts as public. Never add unpublished scripts, private footage, personal data, voice recordings, credentials or final videos to this public repository.
 
 ## Next milestone
 
-After a successful setup run, create a tiny, synthetic 10-second composition using the generated project structure, run `check`, render it locally in CI, and validate the MP4 with FFprobe. Only then proceed to a 60–90-second calibration.
+After a successful run, inspect the MP4 and representative frames. Then build a separate 60–90-second synthetic calibration with a few distinct motion types and captions. Record measured render time, peak memory, disk usage and output size before deciding the production architecture.
