@@ -56,7 +56,6 @@ jobs:
       - name: Inject the committed ThinkVerse composition
         run: |
           cp "$GITHUB_WORKSPACE/render/templates/thinkverse-scene/index.html" "$RUNNER_TEMP/hyperframes-smoke/project/index.html"
-          cp "$GITHUB_WORKSPACE/render/templates/thinkverse-scene/gsap.min.js" "$RUNNER_TEMP/hyperframes-smoke/project/gsap.min.js"
           test -s "$RUNNER_TEMP/hyperframes-smoke/project/index.html"
           test -s "$RUNNER_TEMP/hyperframes-smoke/project/gsap.min.js"
           echo "Composition root and timed clips:"
