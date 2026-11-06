@@ -1,4 +1,4 @@
-name: HyperFrames local-renderer smoke setup
+name: HyperFrames synthetic MP4 smoke test
 
 on:
   workflow_dispatch:
@@ -11,27 +11,27 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  renderer-setup:
-    name: Verify open-source renderer setup
+  synthetic-render:
+    name: Render and validate a 10-second synthetic MP4
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 45
     env:
       CI: "true"
       HYPERFRAMES_NO_TELEMETRY: "1"
       DO_NOT_TRACK: "1"
       HYPERFRAMES_NO_UPDATE_CHECK: "1"
       HYPERFRAMES_SKIP_SKILLS: "1"
+      HYPERFRAMES_CACHE_DIR: ${{ runner.temp }}/hyperframes-cache
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Set up Node.js 22
         uses: actions/setup-node@v4
         with:
           node-version: "22"
-          cache: "npm"
 
-      - name: Install FFmpeg
+      - name: Install FFmpeg and FFprobe
         run: |
           sudo apt-get update
           sudo apt-get install --yes ffmpeg
@@ -41,34 +41,83 @@ jobs:
       - name: Verify pinned HyperFrames CLI
         run: npx --yes hyperframes@0.9.19 --help
 
-      - name: Create isolated synthetic test project
+      - name: Create isolated synthetic project
         run: |
           mkdir -p "$RUNNER_TEMP/hyperframes-smoke"
           npx --yes hyperframes@0.9.19 init "$RUNNER_TEMP/hyperframes-smoke/project" --skip-skills --non-interactive
-          find "$RUNNER_TEMP/hyperframes-smoke/project" -maxdepth 3 -type f -print | sort
+          test -s "$RUNNER_TEMP/hyperframes-smoke/project/index.html"
+          echo "Generated composition:"
+          sed -n '1,180p' "$RUNNER_TEMP/hyperframes-smoke/project/index.html"
 
-      - name: Verify local browser setup
+      - name: Diagnose local dependencies and install pinned browser
         working-directory: ${{ runner.temp }}/hyperframes-smoke/project
         run: |
-          npx --yes hyperframes@0.9.19 doctor --json
+          npx --yes hyperframes@0.9.19 doctor --json | tee "$RUNNER_TEMP/hyperframes-doctor.json"
           npx --yes hyperframes@0.9.19 browser ensure
+          npx --yes hyperframes@0.9.19 browser path
 
-      - name: Record available local render commands
+      - name: Lint and check composition
         working-directory: ${{ runner.temp }}/hyperframes-smoke/project
         run: |
-          npx --yes hyperframes@0.9.19 check --help
-          npx --yes hyperframes@0.9.19 render --help
+          npx --yes hyperframes@0.9.19 lint
+          npx --yes hyperframes@0.9.19 check --json | tee "$RUNNER_TEMP/hyperframes-check.json"
 
-      - name: Report scope
+      - name: Render synthetic 10-second MP4
+        working-directory: ${{ runner.temp }}/hyperframes-smoke/project
+        run: |
+          npx --yes hyperframes@0.9.19 render \
+            --quality draft \
+            --strict \
+            --no-best-effort \
+            --output "$RUNNER_TEMP/hyperframes-smoke/hyperframes-smoke.mp4"
+
+      - name: Validate MP4 metadata with FFprobe
+        run: |
+          test -s "$RUNNER_TEMP/hyperframes-smoke/hyperframes-smoke.mp4"
+          ffprobe -v error \
+            -show_entries format=duration,size \
+            -show_entries stream=codec_type,codec_name,width,height,avg_frame_rate \
+            -of json "$RUNNER_TEMP/hyperframes-smoke/hyperframes-smoke.mp4" \
+            | tee "$RUNNER_TEMP/hyperframes-smoke/ffprobe.json"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const p = JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP + '/hyperframes-smoke/ffprobe.json', 'utf8'));
+          const duration = Number(p.format?.duration);
+          const video = (p.streams || []).find(s => s.codec_type === 'video');
+          if (!Number.isFinite(duration) || duration < 9 || duration > 11) {
+            throw new Error('Expected a roughly 10-second MP4; got duration=' + duration);
+          }
+          if (!video || Number(video.width) !== 1920 || Number(video.height) !== 1080) {
+            throw new Error('Expected a 1920x1080 video stream.');
+          }
+          if (!String(video.avg_frame_rate || '').startsWith('30/1')) {
+            throw new Error('Expected 30 fps; got ' + video.avg_frame_rate);
+          }
+          console.log('MP4 validation passed:', { duration, width: video.width, height: video.height, fps: video.avg_frame_rate, size: p.format.size });
+          NODE
+
+      - name: Upload synthetic smoke-test MP4
+        uses: actions/upload-artifact@v4
+        with:
+          name: hyperframes-synthetic-smoke-mp4
+          path: ${{ runner.temp }}/hyperframes-smoke/hyperframes-smoke.mp4
+          if-no-files-found: error
+          retention-days: 3
+
+      - name: Summarize verified result
+        if: success()
         run: |
           {
-            echo "## HyperFrames setup smoke test"
+            echo "## HyperFrames synthetic MP4 smoke test"
             echo
-            echo "- CLI pinned to `hyperframes@0.9.19`"
-            echo "- Node.js 22 and FFmpeg checked"
-            echo "- Isolated synthetic project initialized"
-            echo "- Local browser setup requested"
-            echo "- No hosted render, account sign-in, media generation, publishing, secrets, or private production assets used"
+            echo "- HyperFrames CLI: v0.9.19"
+            echo "- Runtime: Node.js 22, Ubuntu 24.04"
+            echo "- FFmpeg/FFprobe installed and used"
+            echo "- Browser setup completed"
+            echo "- Generated blank scaffold linted and checked"
+            echo "- 10-second 1920x1080, 30 fps synthetic MP4 rendered and FFprobe-validated"
+            echo "- MP4 artifact contains only synthetic test output; retention: 3 days"
+            echo "- Telemetry opt-outs enabled; no sign-in, hosted render, media generation, publishing, secrets or private production assets"
             echo
-            echo "**Important:** this job verifies the toolchain and browser setup only. It does not claim that an MP4 render has succeeded. A separate synthetic render calibration is still required."
+            echo "This validates a basic local render on the GitHub runner. It does not validate the final visual style, complex animations, audio, long-form performance, or private asset delivery."
           } >> "$GITHUB_STEP_SUMMARY"
