@@ -21,7 +21,6 @@ jobs:
       DO_NOT_TRACK: "1"
       HYPERFRAMES_NO_UPDATE_CHECK: "1"
       HYPERFRAMES_SKIP_SKILLS: "1"
-      HYPERFRAMES_CACHE_DIR: ${{ runner.temp }}/hyperframes-cache
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -34,7 +33,7 @@ jobs:
       - name: Install FFmpeg and FFprobe
         run: |
           sudo apt-get update
-          sudo apt-get install --yes ffmpeg
+          sudo apt-get install --yes ffmpeg unzip
           ffmpeg -version
           ffprobe -version
 
@@ -49,23 +48,23 @@ jobs:
           echo "Generated composition:"
           sed -n '1,180p' "$RUNNER_TEMP/hyperframes-smoke/project/index.html"
 
-      - name: Diagnose local dependencies and install pinned browser
+      - name: Install pinned local browser
         working-directory: ${{ runner.temp }}/hyperframes-smoke/project
         run: |
-          npx --yes hyperframes@0.9.19 doctor --json | tee "$RUNNER_TEMP/hyperframes-doctor.json"
           npx --yes hyperframes@0.9.19 browser ensure
           npx --yes hyperframes@0.9.19 browser path
 
-      - name: Lint and check composition
+      - name: Lint and run composition checks
         working-directory: ${{ runner.temp }}/hyperframes-smoke/project
         run: |
-          npx --yes hyperframes@0.9.19 lint
+          npx --yes hyperframes@0.9.19 lint --json | tee "$RUNNER_TEMP/hyperframes-lint.json"
           npx --yes hyperframes@0.9.19 check --json | tee "$RUNNER_TEMP/hyperframes-check.json"
 
       - name: Render synthetic 10-second MP4
         working-directory: ${{ runner.temp }}/hyperframes-smoke/project
         run: |
           npx --yes hyperframes@0.9.19 render \
+            --fps 30 \
             --quality draft \
             --strict \
             --no-best-effort \
@@ -113,11 +112,11 @@ jobs:
             echo "- HyperFrames CLI: v0.9.19"
             echo "- Runtime: Node.js 22, Ubuntu 24.04"
             echo "- FFmpeg/FFprobe installed and used"
-            echo "- Browser setup completed"
+            echo "- Local browser setup completed"
             echo "- Generated blank scaffold linted and checked"
             echo "- 10-second 1920x1080, 30 fps synthetic MP4 rendered and FFprobe-validated"
             echo "- MP4 artifact contains only synthetic test output; retention: 3 days"
-            echo "- Telemetry opt-outs enabled; no sign-in, hosted render, media generation, publishing, secrets or private production assets"
+            echo "- Telemetry and skill-update opt-outs enabled; no sign-in, hosted render, media generation, publishing, secrets or private production assets"
             echo
             echo "This validates a basic local render on the GitHub runner. It does not validate the final visual style, complex animations, audio, long-form performance, or private asset delivery."
           } >> "$GITHUB_STEP_SUMMARY"
