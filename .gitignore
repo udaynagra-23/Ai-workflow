@@ -1,0 +1,14 @@
+# Local upstream source checkouts (keep licenses/notices in their own clones)
+tools/upstream/
+
+# Generated media and temporary production artifacts
+output/
+renders/
+*.mp3
+*.wav
+*.mp4
+
+# Secrets and local environment
+.env
+.env.*
+!.env.example
