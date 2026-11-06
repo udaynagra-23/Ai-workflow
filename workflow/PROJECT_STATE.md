@@ -9,7 +9,7 @@
 **Last completed:** Added workflow/THUMBNAIL_ENGINE.md, selected the Focus + Contrast + Proof + Curiosity formula, and added stage-by-stage human verification across the production workflow.  
 **Next action:** Approve the channel's master visual identity, then create the first long-form video brief using the script and thumbnail engines.  
 **Blockers:** HyperFrames render access and Claude repository write access remain unverified.  
-**Last updated:** 2026-11-05
+**Last updated:** 2026-11-06
 
 ## Resume instructions
 1. Read README, OPERATING_RULES, DECISIONS, PRODUCTION_ENGINE, SCRIPT_ENGINE, and THUMBNAIL_ENGINE.
@@ -46,3 +46,14 @@
 |---|---|---|---|---|
 | 2026-11-05 | Setup | ChatGPT | Initial setup | Engine configured; start first long-form project |
 | 2026-11-05 | ChatGPT | ChatGPT | Added thumbnail engine and human review gates | Approve visual identity; start first long-form brief |
+
+## Integration verification
+
+- [x] GitHub repository found and read access verified.
+- [x] GitHub write permission verified by committing and reading back `workflow/INTEGRATION_SETUP.md`.
+- [x] Integration smoke-test instructions documented in `workflow/INTEGRATION_SETUP.md`.
+- [ ] Claude write/commit test completed.
+- [ ] HyperFrames project-listing connection test completed.
+- [ ] End-to-end preview and render test completed after creative approvals.
+
+**Immediate next step:** verify Claude's write/commit access and reconnect HyperFrames for a read-only project-listing test. Then approve the master visual identity and begin the first long-form brief.
