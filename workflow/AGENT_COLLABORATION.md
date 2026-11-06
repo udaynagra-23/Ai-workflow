@@ -5,71 +5,66 @@
 ## Shared operating principles
 
 1. `main` is the single source of truth.
-2. Neither agent merges into `main`; the user approves merges.
+2. The user approves merges into `main`.
 3. Work is divided by ownership, not duplicated.
 4. Before starting a task, each agent reads this file and the current project state.
-5. An agent must inspect existing files and open PRs before creating a new implementation.
+5. Inspect existing files and open PRs before creating an implementation.
 6. If a task crosses ownership boundaries, the owner proposes the interface and asks the other agent to review; both do not implement the same feature.
 7. Handoffs include changed paths, decisions, tests run, tests not run, known risks and the next exact task.
 8. Never claim a test passed unless it was actually run and its output inspected.
 
-## Work split
+## Current operating mode
 
-### ChatGPT — editorial and production coordinator
+Claude is temporarily unavailable due to its usage limit. ChatGPT is the sole active implementation and production agent until Claude is available again. The work already committed to GitHub is the shared project state; no parallel rebuild is needed.
+
+## ChatGPT — current owner
 
 Owns:
-- topic research and factual source checking;
-- video briefs, scripts and story structure;
+- topic research, factual source checking, video briefs, scripts and story structure;
 - storyboard content and scene-by-scene editorial intent;
-- narration text and narration QA criteria;
+- narration text and narration QA;
 - thumbnail concepts and packaging;
-- human approval gates and production-state coordination;
-- independent review of Claude's renderer PRs against the agreed policy;
-- integration decisions and conflict resolution proposals.
+- production-state coordination and human approval gates;
+- open-source HyperFrames renderer integration, CLI pinning, CI workflow, synthetic tests and calibration;
+- independent QA and integration.
 
-Does not independently rebuild the renderer, CLI wrapper, dependency setup or GitHub Actions implementation while Claude owns those tasks.
+ChatGPT must reuse the existing production engine and template libraries, not recreate them.
 
-### Claude — renderer engineering owner
+## Claude — optional reviewer / future specialist
 
-Owns:
-- open-source HyperFrames technical integration;
-- pinned CLI/dependency setup;
-- render wrapper and command allowlist;
-- local-only environment enforcement;
-- GitHub Actions workflow implementation;
-- synthetic smoke-test composition;
-- calibration tooling and technical render measurements;
-- renderer setup and troubleshooting documentation.
+When available, Claude may:
+- review the renderer implementation and report bugs without creating a duplicate version;
+- take a clearly assigned, unowned task after a written handoff;
+- review research or scripts when explicitly requested.
 
-Does not rewrite scripts, editorial templates, thumbnail strategy or the existing production engine unless explicitly assigned.
+Claude must not recreate files or features already owned and completed by ChatGPT. Ownership transfers only through an explicit handoff.
 
-### User — final authority
+## User — final authority
 
 Approves:
-- scope changes and architecture changes;
+- scope and architecture changes;
 - scripts, narration, storyboards and visual direction;
-- final renders and publishing;
+- final production renders and publishing;
 - PR merges and changes to `main`;
 - any paid service or credit-consuming operation.
 
 ## Branch and handoff protocol
 
-- Claude uses `claude/<task-name>` branches.
 - ChatGPT uses `chatgpt/<task-name>` branches.
+- Claude uses `claude/<task-name>` branches only for tasks explicitly assigned to Claude.
 - One owner per file/task at a time.
 - Keep PRs small and focused.
-- The non-owner may review and comment but should not create a parallel implementation.
-- Before taking over a task, explicitly hand off ownership and summarize the current state.
+- The non-owner reviews and comments; it does not create a parallel implementation.
 - If both branches touch the same file, stop and coordinate; do not force-push or overwrite.
 
 ## Current HyperFrames assignment
 
-- ChatGPT: architecture/policy coordination, editorial pipeline and independent technical review.
-- Claude: implement the renderer foundation in `render/` on a Claude-owned branch, following `render/RENDER_POLICY.md`.
-- Both: no parallel renderer implementation.
-- First engineering milestone: synthetic 10-second smoke render only.
-- Second milestone: 60–90-second calibration render only after smoke-test review.
-- No production video or final export until the user approves calibration results.
+- ChatGPT: active owner of renderer policy, smoke workflow, implementation and calibration.
+- Claude: no active renderer implementation assignment while unavailable.
+- First milestone: synthetic 10-second MP4 smoke render.
+- Second milestone: 60–90-second synthetic calibration only after smoke-test review.
+- Production composition integration follows calibration and the user's visual-style approval.
+- No final production export or publishing without the user's approval.
 
 ## Required task handoff format
 
@@ -85,4 +80,4 @@ Every handoff must state:
 
 ## Status truthfulness
 
-Repository access is not the same as local execution. Reading source code is not a render test. A generated MP4 is not visually approved until a human reviews it. A successful CI run is not proof that private production assets are safely handled.
+Repository access is not local execution. Reading source code is not a render test. A generated MP4 is not visually approved until a human reviews it. A successful CI run is not proof that private production assets are safely handled.
