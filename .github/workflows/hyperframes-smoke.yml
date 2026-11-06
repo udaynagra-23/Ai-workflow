@@ -1,0 +1,74 @@
+name: HyperFrames local-renderer smoke setup
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hyperframes-smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  renderer-setup:
+    name: Verify open-source renderer setup
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      CI: "true"
+      HYPERFRAMES_NO_TELEMETRY: "1"
+      DO_NOT_TRACK: "1"
+      HYPERFRAMES_NO_UPDATE_CHECK: "1"
+      HYPERFRAMES_SKIP_SKILLS: "1"
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes ffmpeg
+          ffmpeg -version
+          ffprobe -version
+
+      - name: Verify pinned HyperFrames CLI
+        run: npx --yes hyperframes@0.9.19 --help
+
+      - name: Create isolated synthetic test project
+        run: |
+          mkdir -p "$RUNNER_TEMP/hyperframes-smoke"
+          npx --yes hyperframes@0.9.19 init "$RUNNER_TEMP/hyperframes-smoke/project" --skip-skills --non-interactive
+          find "$RUNNER_TEMP/hyperframes-smoke/project" -maxdepth 3 -type f -print | sort
+
+      - name: Verify local browser setup
+        working-directory: ${{ runner.temp }}/hyperframes-smoke/project
+        run: |
+          npx --yes hyperframes@0.9.19 doctor --json
+          npx --yes hyperframes@0.9.19 browser ensure
+
+      - name: Record available local render commands
+        working-directory: ${{ runner.temp }}/hyperframes-smoke/project
+        run: |
+          npx --yes hyperframes@0.9.19 check --help
+          npx --yes hyperframes@0.9.19 render --help
+
+      - name: Report scope
+        run: |
+          {
+            echo "## HyperFrames setup smoke test"
+            echo
+            echo "- CLI pinned to `hyperframes@0.9.19`"
+            echo "- Node.js 22 and FFmpeg checked"
+            echo "- Isolated synthetic project initialized"
+            echo "- Local browser setup requested"
+            echo "- No hosted render, account sign-in, media generation, publishing, secrets, or private production assets used"
+            echo
+            echo "**Important:** this job verifies the toolchain and browser setup only. It does not claim that an MP4 render has succeeded. A separate synthetic render calibration is still required."
+          } >> "$GITHUB_STEP_SUMMARY"
