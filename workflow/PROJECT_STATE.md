@@ -56,7 +56,7 @@
 - [ ] HyperFrames project-listing connection test completed.
 - [ ] End-to-end preview and render test completed after creative approvals.
 
-**Immediate next step:** verify Claude's write/commit access and reconnect HyperFrames for a read-only project-listing test. Then approve the master visual identity and begin the first long-form brief.
+**Immediate next step:** set up an isolated Codespaces trial for `kaomei/stickman-video-director` and `remsky/Kokoro-FastAPI`, after reviewing their current install instructions and resource requirements. Produce a 30-second narrated animation sample with visible character/object movement, camera motion, scene transitions, and synchronized narration. Do not accept slideshow-style still scenes as a successful animation test. Compare output quality and runtime before integrating either tool into the main pipeline. The GitHub connector can edit repository files but cannot execute commands inside the user's Codespace; installation and rendering must be run there and verified from the resulting artifacts.
 
 ## 2026-11-06 scene troubleshooting update
 - Confirmed the earlier successful Actions run installed FFmpeg/FFprobe, installed the HyperFrames CLI and browser, linted/checked a generated scaffold, rendered an MP4, and validated its metadata.
@@ -64,3 +64,10 @@
 - Added `render/templates/thinkverse-scene/index.html`: a 12-second, 1920x1080, two-scene visual calibration with an embedded SVG presenter and timed GSAP animation.
 - Updated `.github/workflows/hyperframes-smoke.yml` to install GSAP locally, inject the committed composition, run lint/check, render at 30 fps, validate duration/dimensions/frame rate, and reject a nearly uniform sampled frame.
 - The updated workflow has not been run from this session; manual Actions execution and human visual inspection remain required.
+
+
+## 2026-11-06 animation and narration trial requirement
+- User rejected the previous sample because it looked like a slideshow and lacked meaningful animation.
+- Selected trial candidates already documented in `integrations/REPOSITORY_ADAPTERS.md`: `kaomei/stickman-video-director` and `remsky/Kokoro-FastAPI`.
+- Required acceptance test: one 30-second sample with narration and clearly observable animated actions/motion; verify scene-to-narration timing and inspect the actual MP4, not only workflow logs.
+- Keep both projects isolated from the root `Ai-workflow` dependencies. Do not claim installation or integration until Codespaces execution and output are verified.
