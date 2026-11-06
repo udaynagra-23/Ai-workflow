@@ -1,16 +1,15 @@
 # Long-form renderer: open-source HyperFrames
 
-This directory is reserved for the **open-source HyperFrames CLI** used by the long-form video workflow.
-
-It is separate from the original HyperFrames/HeyGen connector, which remains reserved for the Shorts workflow.
+This directory is reserved for the **open-source HyperFrames CLI** used by the long-form video workflow. It is separate from the original HyperFrames/HeyGen connector, which remains reserved for Shorts.
 
 ## Current status
 
-- Architecture and local-only policy are proposals on the `chatgpt/hyperframes-foundation` branch.
-- No renderer dependencies have been installed.
-- No video has been rendered or visually validated.
-- No GitHub Actions workflow has been enabled.
-- No unpublished scripts, footage, credentials, or generated final videos belong in this public repository.
+- Renderer policy and collaboration rules are documented.
+- A manual GitHub Actions workflow now performs a synthetic 10-second MP4 smoke test.
+- The workflow has not yet been run; no render is claimed as successful.
+- The visual identity and animation style remain deliberately unfinalized.
+- Existing scene/animation libraries are preserved as references, not treated as approved visual specifications.
+- No unpublished scripts, footage, credentials or final production videos belong in this public repository.
 
 ## Intended layout
 
@@ -18,20 +17,18 @@ It is separate from the original HyperFrames/HeyGen connector, which remains res
 render/
   README.md
   RENDER_POLICY.md
-  package.json             # add only after version/runtime verification
-  package-lock.json        # generated and committed with the pinned toolchain
-  scripts/                 # allowlisted wrapper and validation helpers
-  templates/               # HyperFrames compositions mapped to existing SC/AN IDs
-  tests/
-    smoke/                 # synthetic, rights-cleared test assets only
+  SMOKE_TEST.md
+  templates/       # generic compositions, style-neutral until approved
+  scripts/         # render wrapper and validation helpers, added after smoke test
+  tests/           # synthetic test compositions only
 ```
 
-The per-video brief, script, storyboard, and production state remain in the existing workflow structure. The renderer should consume approved inputs rather than become a second source of truth.
+The per-video brief, script, storyboard and production state remain in the existing workflow structure. The renderer consumes approved inputs; it does not become a second source of truth.
 
-## Next implementation owner
+## Current owner
 
-Claude owns the renderer implementation (dependency pinning, wrapper, CI workflow, smoke project and calibration). ChatGPT owns editorial production inputs, architecture coordination and independent review. See [Agent collaboration](../workflow/AGENT_COLLABORATION.md).
+ChatGPT is the active implementation owner while Claude is unavailable. The existing creative engine and libraries will be reused, not recreated. If Claude returns, it can review the renderer or take a clearly unassigned task; it must not build a parallel implementation.
 
-## Important
+## Public repository warning
 
-This is a public repository. GitHub Actions artifacts and files committed here must be treated as public. Do not put private or unreleased production material here.
+This repository is public. Workflow logs and artifacts must be treated as public. The smoke workflow uploads only a synthetic MP4 for three days. Do not put private production material here.
