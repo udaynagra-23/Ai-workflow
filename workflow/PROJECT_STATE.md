@@ -1,14 +1,14 @@
 # Project State
 
 **Project:** Long-form-first YouTube production engine  
-**Status:** Research-informed script and thumbnail engines documented; human verification is required at every major stage; render workflow still needs an end-to-end test.  
+**Status:** Long-form production documentation is in place; a first custom 12-second ThinkVerse HyperFrames scene and an updated scene-render workflow are committed. The updated workflow has not yet been executed.  
 **Active video:** None  
 **Current engine:** ChatGPT  
 **Primary format:** Long-form YouTube (16:9 default)  
 **Secondary format:** Shorts adapted from long-form research and assets  
 **Last completed:** Added workflow/THUMBNAIL_ENGINE.md, selected the Focus + Contrast + Proof + Curiosity formula, and added stage-by-stage human verification across the production workflow.  
-**Next action:** Approve the channel's master visual identity, then create the first long-form video brief using the script and thumbnail engines.  
-**Blockers:** HyperFrames render access and Claude repository write access remain unverified.  
+**Next action:** Run `.github/workflows/hyperframes-smoke.yml` manually and inspect the 12-second ThinkVerse scene artifact before extending the composition.  
+**Blockers:** Updated scene-render workflow execution and visual output are not yet verified; HyperFrames MCP project access and Claude repository write access remain unverified.  
 **Last updated:** 2026-11-06
 
 ## Resume instructions
@@ -32,7 +32,7 @@
 - [x] Long-form thumbnail formula and thumbnail engine documented
 - [x] Human verification checkpoints added at every major production stage
 - [ ] Master visual identity approved
-- [ ] HyperFrames integration and render capability tested
+- [ ] Updated ThinkVerse scene workflow executed and MP4 visually inspected
 - [ ] Claude repository write access tested
 - [ ] First long-form video produced and reviewed end-to-end
 
@@ -57,3 +57,10 @@
 - [ ] End-to-end preview and render test completed after creative approvals.
 
 **Immediate next step:** verify Claude's write/commit access and reconnect HyperFrames for a read-only project-listing test. Then approve the master visual identity and begin the first long-form brief.
+
+## 2026-11-06 scene troubleshooting update
+- Confirmed the earlier successful Actions run installed FFmpeg/FFprobe, installed the HyperFrames CLI and browser, linted/checked a generated scaffold, rendered an MP4, and validated its metadata.
+- Found that the smoke workflow rendered only the fresh scaffold and never copied in a ThinkVerse composition. This explains the placeholder output; it was not evidence of an FFmpeg failure.
+- Added `render/templates/thinkverse-scene/index.html`: a 12-second, 1920x1080, two-scene visual calibration with an embedded SVG presenter and timed GSAP animation.
+- Updated `.github/workflows/hyperframes-smoke.yml` to install GSAP locally, inject the committed composition, run lint/check, render at 30 fps, validate duration/dimensions/frame rate, and reject a nearly uniform sampled frame.
+- The updated workflow has not been run from this session; manual Actions execution and human visual inspection remain required.
