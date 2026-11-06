@@ -1,73 +1,59 @@
 # Project State
 
-**Project:** Long-form-first YouTube production engine  
-**Status:** Long-form production documentation is in place; a first custom 12-second ThinkVerse HyperFrames scene and an updated scene-render workflow are committed. The updated workflow has not yet been executed.  
-**Active video:** None  
-**Current engine:** ChatGPT  
-**Primary format:** Long-form YouTube (16:9 default)  
-**Secondary format:** Shorts adapted from long-form research and assets  
-**Last completed:** Added workflow/THUMBNAIL_ENGINE.md, selected the Focus + Contrast + Proof + Curiosity formula, and added stage-by-stage human verification across the production workflow.  
-**Next action:** Run `.github/workflows/hyperframes-smoke.yml` manually and inspect the 12-second ThinkVerse scene artifact before extending the composition.  
-**Blockers:** Updated scene-render workflow execution and visual output are not yet verified; HyperFrames MCP project access and Claude repository write access remain unverified.  
+**Project:** ThinkVerse AI video-production workflow  
+**Status:** Core workflow and selected engine checkouts are prepared. Final milestone is one 30-second narrated animation sample. No additional engine expansion is planned before that test.  
+**Active video:** 30-second technical sample (no public upload)  
+**Current coordinator:** ChatGPT; Claude remains optional  
+**Primary format:** Long-form YouTube (16:9)  
+**Secondary format:** Shorts only after the core workflow is validated  
+**Last completed:** Core research/script/thumbnail/approval documentation, animation and narration adapter plans, HyperFrames scene template, and bootstrap script are committed. User reports running `scripts/bootstrap-engines.sh` in Codespaces and seeing the three upstream folders. This is user-reported; the GitHub connector cannot inspect that live Codespaces filesystem.  
+**Only next milestone:** Produce and inspect one 30-second sample with approved narration, visible character/object animation, camera movement, scene transitions, captions, and sound design. Verify the actual MP4 and audio, not just command output.  
+**No further expansion:** Do not add more repositories, engines, or optional integrations before the sample is reviewed. Do not begin a full-length video until the sample passes user review.  
 **Last updated:** 2026-11-06
 
 ## Resume instructions
-1. Read README, OPERATING_RULES, DECISIONS, PRODUCTION_ENGINE, SCRIPT_ENGINE, and THUMBNAIL_ENGINE.
-2. Confirm the latest commit and active video files.
-3. Keep long-form as the primary format and reuse approved templates.
-4. Use topic-appropriate story structures; do not force formulas or fixed timing rules.
-5. Ask only for critical missing information or consequential approvals.
-6. Do not claim render or repository access until tested.
+1. Read this file, README.md, workflow/DECISIONS.md, workflow/PRODUCTION_ENGINE.md, workflow/SCRIPT_ENGINE.md, and integrations/REPOSITORY_ADAPTERS.md.
+2. Use the already-cloned upstream folders in the user's Codespace; do not clone them again unless a folder is genuinely missing.
+3. Keep upstream projects isolated. Do not install every dependency set into the root repository environment.
+4. Use only free/local capabilities for this trial. No paid APIs, subscriptions, or credits.
+5. Generate one 30-second sample, then inspect the real MP4, narration, captions, motion, and timing.
+6. Stop after presenting the sample and any verified limitations. Wait for the user's review; do not continue to another project or full video automatically.
 
-## Engine completion status
-- [x] One-run production sequence documented
-- [x] Long-form-first production priorities documented
-- [x] Shorts derivative workflow documented
-- [x] Scene and animation template libraries created
-- [x] Independent QA and recheck process documented
-- [x] User feedback memory rules documented
-- [x] Research-informed long-form script engine documented
-- [x] Story structure selection and open-loop tracking documented
-- [x] Post-publish retention analytics feedback loop documented
-- [x] Long-form thumbnail formula and thumbnail engine documented
-- [x] Human verification checkpoints added at every major production stage
-- [ ] Master visual identity approved
-- [ ] Updated ThinkVerse scene workflow executed and MP4 visually inspected
-- [ ] Claude repository write access tested
-- [ ] First long-form video produced and reviewed end-to-end
+## Engine status
+- [x] Research-grounded script and story workflow documented
+- [x] Thumbnail workflow and formula documented
+- [x] Human approval checkpoints documented
+- [x] Animation and narration candidates selected
+- [x] Bootstrap script committed; user reports successful source checkouts in Codespaces
+- [x] HyperFrames scene template and 12-second smoke workflow committed
+- [ ] Inspect upstream setup requirements in the live Codespace
+- [ ] Connect approved narration and animation output to the composition workflow
+- [ ] Render the 30-second narrated sample
+- [ ] Inspect actual MP4 and audio; obtain user's review
 
-## Active video tracker
-| Video ID | Topic | Stage | Approved script | Assets | Next action |
-|---|---|---|---|---|---|
-| — | — | — | — | — | Approve visual identity and create first long-form brief |
+## Selected components (no new additions before sample)
+| Component | Selected role | Trial policy |
+|---|---|---|
+| Stickman Video Director | Scene/storyboard and illustrated motion candidate | Use only after reviewing its current setup instructions; confirm real motion in output |
+| Kokoro-FastAPI | Local narration candidate | CPU-first feasibility; model download and RAM/storage may be limiting |
+| HyperFrames + FFmpeg | Composition and final MP4 rendering | Use the existing scene workflow; verify actual output |
+| MoneyPrinterTurbo | Optional comparison only | Do not install its large dependency stack for the primary sample; no paid provider keys |
+| ChatGPT | Research, script, orchestration, QA and repo updates | Can edit repository files, but cannot execute the user's Codespaces terminal |
 
-## Handoff log
-| Date | From | To | Reason | Resume point |
-|---|---|---|---|---|
-| 2026-11-05 | Setup | ChatGPT | Initial setup | Engine configured; start first long-form project |
-| 2026-11-05 | ChatGPT | ChatGPT | Added thumbnail engine and human review gates | Approve visual identity; start first long-form brief |
+## Environment and execution boundary
+- The user has run the bootstrap script in Codespaces and reports seeing `stickman-video-director`, `Kokoro-FastAPI`, and `MoneyPrinterTurbo` under `tools/upstream`.
+- This assistant cannot independently inspect the live Codespaces terminal or filesystem through the GitHub connector.
+- Closing the Codespaces browser window does not delete the Codespace. Stopping the Codespace pauses its machine; saved files remain. It must be resumed to run commands.
+- GitHub repository edits can be made without the Codespaces window. Installing dependencies, starting local services, rendering, and verifying the generated file require an execution environment; the user may need to resume Codespaces and run the final command.
+- Do not claim any engine is installed, connected, or rendered until the corresponding command and output are verified.
+- Do not assume a GPU is available merely from a memory/disk figure. Use only resources actually assigned to the Codespace.
 
-## Integration verification
-
-- [x] GitHub repository found and read access verified.
-- [x] GitHub write permission verified by committing and reading back `workflow/INTEGRATION_SETUP.md`.
-- [x] Integration smoke-test instructions documented in `workflow/INTEGRATION_SETUP.md`.
-- [ ] Claude write/commit test completed.
-- [ ] HyperFrames project-listing connection test completed.
-- [ ] End-to-end preview and render test completed after creative approvals.
-
-**Immediate next step:** set up an isolated Codespaces trial for `kaomei/stickman-video-director` and `remsky/Kokoro-FastAPI`, after reviewing their current install instructions and resource requirements. Produce a 30-second narrated animation sample with visible character/object movement, camera motion, scene transitions, and synchronized narration. Do not accept slideshow-style still scenes as a successful animation test. Compare output quality and runtime before integrating either tool into the main pipeline. The GitHub connector can edit repository files but cannot execute commands inside the user's Codespace; installation and rendering must be run there and verified from the resulting artifacts.
-
-## 2026-11-06 scene troubleshooting update
-- Confirmed the earlier successful Actions run installed FFmpeg/FFprobe, installed the HyperFrames CLI and browser, linted/checked a generated scaffold, rendered an MP4, and validated its metadata.
-- Found that the smoke workflow rendered only the fresh scaffold and never copied in a ThinkVerse composition. This explains the placeholder output; it was not evidence of an FFmpeg failure.
-- Added `render/templates/thinkverse-scene/index.html`: a 12-second, 1920x1080, two-scene visual calibration with an embedded SVG presenter and timed GSAP animation.
-- Updated `.github/workflows/hyperframes-smoke.yml` to install GSAP locally, inject the committed composition, run lint/check, render at 30 fps, validate duration/dimensions/frame rate, and reject a nearly uniform sampled frame.
-- The updated workflow has not been run from this session; manual Actions execution and human visual inspection remain required.
-
-
-## 2026-11-06 animation and narration trial requirement
-- User rejected the previous sample because it looked like a slideshow and lacked meaningful animation.
-- Selected trial candidates already documented in `integrations/REPOSITORY_ADAPTERS.md`: `kaomei/stickman-video-director` and `remsky/Kokoro-FastAPI`.
-- Required acceptance test: one 30-second sample with narration and clearly observable animated actions/motion; verify scene-to-narration timing and inspect the actual MP4, not only workflow logs.
-- Keep both projects isolated from the root `Ai-workflow` dependencies. Do not claim installation or integration until Codespaces execution and output are verified.
+## Acceptance criteria for the single sample
+- Exactly one 30-second draft, not a slideshow.
+- Narration is audible, clear, and synchronized with scene changes.
+- At least several visibly animated actions (character/object motion), with purposeful camera movement and transitions.
+- Captions are readable and timed to narration.
+- Audio levels are consistent; no silent, clipped, or corrupt output.
+- MP4 metadata and representative frames are checked.
+- No paid service, API key, subscription, or automatic publishing.
+- User reviews the sample. Stop there until the user decides what happens next.
