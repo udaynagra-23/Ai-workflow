@@ -1,4 +1,4 @@
-name: HyperFrames synthetic MP4 smoke test
+name: HyperFrames ThinkVerse scene smoke test
 
 on:
   workflow_dispatch:
@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   synthetic-render:
-    name: Render and validate a 10-second synthetic MP4
+    name: Render and validate a real 12-second ThinkVerse scene
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     env:
@@ -40,13 +40,27 @@ jobs:
       - name: Verify pinned HyperFrames CLI
         run: npx --yes hyperframes@0.9.19 --help
 
-      - name: Create isolated synthetic project
+      - name: Create isolated HyperFrames project
         run: |
           mkdir -p "$RUNNER_TEMP/hyperframes-smoke"
-          npx --yes hyperframes@0.9.19 init "$RUNNER_TEMP/hyperframes-smoke/project" --skip-skills --non-interactive
+          npx --yes hyperframes@0.9.19 init "$RUNNER_TEMP/hyperframes-smoke/project" --example blank --skip-skills
           test -s "$RUNNER_TEMP/hyperframes-smoke/project/index.html"
-          echo "Generated composition:"
-          sed -n '1,180p' "$RUNNER_TEMP/hyperframes-smoke/project/index.html"
+
+      - name: Install local animation dependency
+        working-directory: ${{ runner.temp }}/hyperframes-smoke/project
+        run: |
+          npm install --no-save --no-package-lock gsap@3.12.5
+          cp node_modules/gsap/dist/gsap.min.js ./gsap.min.js
+          test -s ./gsap.min.js
+
+      - name: Inject the committed ThinkVerse composition
+        run: |
+          cp "$GITHUB_WORKSPACE/render/templates/thinkverse-scene/index.html" "$RUNNER_TEMP/hyperframes-smoke/project/index.html"
+          cp "$GITHUB_WORKSPACE/render/templates/thinkverse-scene/gsap.min.js" "$RUNNER_TEMP/hyperframes-smoke/project/gsap.min.js"
+          test -s "$RUNNER_TEMP/hyperframes-smoke/project/index.html"
+          test -s "$RUNNER_TEMP/hyperframes-smoke/project/gsap.min.js"
+          echo "Composition root and timed clips:"
+          grep -nE 'data-composition-id|data-start|data-duration|data-track-index|__timelines' "$RUNNER_TEMP/hyperframes-smoke/project/index.html"
 
       - name: Install pinned local browser
         working-directory: ${{ runner.temp }}/hyperframes-smoke/project
@@ -60,7 +74,7 @@ jobs:
           npx --yes hyperframes@0.9.19 lint --json | tee "$RUNNER_TEMP/hyperframes-lint.json"
           npx --yes hyperframes@0.9.19 check --json | tee "$RUNNER_TEMP/hyperframes-check.json"
 
-      - name: Render synthetic 10-second MP4
+      - name: Render ThinkVerse scene MP4
         working-directory: ${{ runner.temp }}/hyperframes-smoke/project
         run: |
           npx --yes hyperframes@0.9.19 render \
@@ -68,23 +82,23 @@ jobs:
             --quality draft \
             --strict \
             --no-best-effort \
-            --output "$RUNNER_TEMP/hyperframes-smoke/hyperframes-smoke.mp4"
+            --output "$RUNNER_TEMP/hyperframes-smoke/thinkverse-scene.mp4"
 
       - name: Validate MP4 metadata with FFprobe
         run: |
-          test -s "$RUNNER_TEMP/hyperframes-smoke/hyperframes-smoke.mp4"
+          test -s "$RUNNER_TEMP/hyperframes-smoke/thinkverse-scene.mp4"
           ffprobe -v error \
             -show_entries format=duration,size \
             -show_entries stream=codec_type,codec_name,width,height,avg_frame_rate \
-            -of json "$RUNNER_TEMP/hyperframes-smoke/hyperframes-smoke.mp4" \
+            -of json "$RUNNER_TEMP/hyperframes-smoke/thinkverse-scene.mp4" \
             | tee "$RUNNER_TEMP/hyperframes-smoke/ffprobe.json"
           node --input-type=module <<'NODE'
           import fs from 'node:fs';
           const p = JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP + '/hyperframes-smoke/ffprobe.json', 'utf8'));
           const duration = Number(p.format?.duration);
           const video = (p.streams || []).find(s => s.codec_type === 'video');
-          if (!Number.isFinite(duration) || duration < 9 || duration > 11) {
-            throw new Error('Expected a roughly 10-second MP4; got duration=' + duration);
+          if (!Number.isFinite(duration) || duration < 11 || duration > 13) {
+            throw new Error('Expected a roughly 12-second MP4; got duration=' + duration);
           }
           if (!video || Number(video.width) !== 1920 || Number(video.height) !== 1080) {
             throw new Error('Expected a 1920x1080 video stream.');
@@ -92,14 +106,21 @@ jobs:
           if (!String(video.avg_frame_rate || '').startsWith('30/1')) {
             throw new Error('Expected 30 fps; got ' + video.avg_frame_rate);
           }
-          console.log('MP4 validation passed:', { duration, width: video.width, height: video.height, fps: video.avg_frame_rate, size: p.format.size });
+          console.log('MP4 metadata passed:', { duration, width: video.width, height: video.height, fps: video.avg_frame_rate, size: p.format.size });
           NODE
 
-      - name: Upload synthetic smoke-test MP4
+      - name: Detect blank-frame output
+        run: |
+          ffmpeg -hide_banner -loglevel error -ss 2 -i "$RUNNER_TEMP/hyperframes-smoke/thinkverse-scene.mp4" -frames:v 1 -f rawvideo -pix_fmt gray - \
+            | python3 -c 'import sys, statistics; b=sys.stdin.buffer.read(); assert b, "No decoded frame"; p=list(b); mean=statistics.fmean(p); spread=statistics.pstdev(p); print({"sample_frame_mean_luma": round(mean,2), "pixel_spread": round(spread,2)}); assert spread > 8 and mean > 8, "Frame appears blank or nearly uniform"'
+
+      - name: Upload synthetic ThinkVerse scene artifact
         uses: actions/upload-artifact@v4
         with:
-          name: hyperframes-synthetic-smoke-mp4
-          path: ${{ runner.temp }}/hyperframes-smoke/hyperframes-smoke.mp4
+          name: thinkverse-scene-smoke-test
+          path: |
+            ${{ runner.temp }}/hyperframes-smoke/thinkverse-scene.mp4
+            ${{ runner.temp }}/hyperframes-smoke/ffprobe.json
           if-no-files-found: error
           retention-days: 3
 
@@ -107,16 +128,16 @@ jobs:
         if: success()
         run: |
           {
-            echo "## HyperFrames synthetic MP4 smoke test"
+            echo "## ThinkVerse scene smoke test"
             echo
             echo "- HyperFrames CLI: v0.9.19"
             echo "- Runtime: Node.js 22, Ubuntu 24.04"
             echo "- FFmpeg/FFprobe installed and used"
-            echo "- Local browser setup completed"
-            echo "- Generated blank scaffold linted and checked"
-            echo "- 10-second 1920x1080, 30 fps synthetic MP4 rendered and FFprobe-validated"
-            echo "- MP4 artifact contains only synthetic test output; retention: 3 days"
-            echo "- Telemetry and skill-update opt-outs enabled; no sign-in, hosted render, media generation, publishing, secrets or private production assets"
-            echo
-            echo "This validates a basic local render on the GitHub runner. It does not validate the final visual style, complex animations, audio, long-form performance, or private asset delivery."
+            echo "- Committed ThinkVerse composition injected into the project"
+            echo "- GSAP loaded locally (no CDN dependency during render)"
+            echo "- Lint/check passed"
+            echo "- 12-second 1920x1080, 30 fps MP4 rendered and metadata-validated"
+            echo "- Sample-frame blankness check passed"
+            echo "- Synthetic test output only; artifact retention: 3 days"
+            echo "- This is a scene calibration, not a complete long-form production test"
           } >> "$GITHUB_STEP_SUMMARY"
