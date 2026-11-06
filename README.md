@@ -1,47 +1,37 @@
-# AI Video Production Workflow
+# ThinkVerse AI Video Production Workflow
 
-A reusable, human-approved YouTube production system. **Long-form videos are the primary focus**; Shorts are a secondary format that can reuse the same research, story assets, visual identity, and motion library.
+A reusable, human-approved YouTube production system. Long-form is the intended primary format; Shorts are secondary.
 
-## Core operating model
-- ChatGPT and Claude are interchangeable creative/production engines when their access permits.
-- GitHub is the canonical shared memory and project record.
-- HyperFrames is the intended composition/rendering destination, subject to actual tool availability.
-- The user is creative director and final approver for consequential choices.
-- Run the full pipeline in one coordinated pass wherever possible: research → story → script → storyboard → asset plan → composition → preview → QA. Do not pause for routine reversible decisions. Pause only at meaningful approval gates or genuine blockers.
+## Current milestone
+The core workflow and selected engine plans are in place. The user reports that the bootstrap script has cloned the selected upstream projects into their Codespaces workspace. **The only planned next milestone is one 30-second narrated animation sample.** Do not expand the tool stack or start a full video before the sample is reviewed.
 
-## Long-form-first priorities
-- Build a strong narrative promise, opening, chapters, evidence, examples, transitions, payoff, and satisfying ending.
-- Use varied visuals that explain or advance the story: cinematic B-roll, diagrams, timelines, maps, data, demonstrations, and purposeful typography.
-- Design for 16:9 by default for long-form. Adapt selected scenes to 9:16 for Shorts when useful.
-- Plan pacing around meaning and narration, not arbitrary rapid cuts or effects.
-- Reuse approved visual identity, scenes, animation patterns, captions, transitions, and sound rules across videos.
+## Production components
+- **ChatGPT:** research, script, storyboard, production coordination, repository updates, and QA guidance.
+- **Stickman Video Director:** candidate scene-planning and illustrated-animation engine.
+- **Kokoro-FastAPI:** candidate self-hosted narration engine; resource feasibility must be verified.
+- **HyperFrames + FFmpeg:** composition and MP4 rendering.
+- **MoneyPrinterTurbo:** optional comparison only; not part of the default install path.
+- **Claude:** optional collaborator, never a required dependency.
+
+## Operating rules
+- Preserve the user's approved creative direction and review consequential choices.
+- Use only free/local capabilities for the initial sample. No paid APIs, subscriptions, or credits.
+- Keep upstream repositories and dependencies isolated from the core workflow.
+- Do not publish automatically.
+- Do not claim installation, integration, rendering, or QA until verified from actual execution and output.
+- Avoid slideshow-style output: the sample must show meaningful character/object motion, camera movement, transitions, and narration synchronization.
+- Stop after the 30-second sample is presented for user review. No additional engine expansion is planned before then.
+
+## Important execution boundary
+GitHub repository tools can inspect and edit committed files, but they cannot run commands inside the user's live Codespace. The user must resume the Codespace and run the final setup/render command when execution is needed. Closing its browser window does not delete it; stopping it pauses the machine while preserving saved files.
 
 ## Source of truth
-- `workflow/OPERATING_RULES.md` — operating rules and approval policy.
-- `workflow/PRODUCTION_ENGINE.md` — full production pipeline and quality gates.
-- `workflow/SCRIPT_ENGINE.md` — research-grounded long-form scripting system.
-- `workflow/THUMBNAIL_ENGINE.md` — selected thumbnail formula, concept workflow, and review checklist.
-- `workflow/PROJECT_STATE.md` — current project, status, next action, and blockers.
-- `workflow/DECISIONS.md` — user-approved durable decisions.
-- `templates/` — reusable briefs, handoffs, approval checks, storyboards, and visual templates.
-- `videos/<video-id>/` — each video's brief, research, script, scene plan, asset manifest, and production notes.
+- `workflow/PROJECT_STATE.md` — current status and single next milestone.
+- `workflow/PRODUCTION_ENGINE.md` — production and approval gates.
+- `workflow/SCRIPT_ENGINE.md` — research-grounded scripting.
+- `workflow/THUMBNAIL_ENGINE.md` — title/thumbnail workflow.
+- `integrations/REPOSITORY_ADAPTERS.md` — selected upstream engine constraints.
+- `templates/` — reusable production templates.
 
-## Start or resume
-1. Read this README and the relevant workflow files.
-2. Read the active video's files and the latest committed state.
-3. Reuse approved templates and decisions.
-4. Continue from the next incomplete stage; do not redo approved work.
-5. Complete all independent work in one coordinated run. Ask only for missing critical information, consequential creative approvals, paid-credit use, final render approval where required, or publishing.
-6. Update state and commit useful work before ending.
-
-## Human control
-Human verification is required at every major stage: brief, research/story, script, thumbnail concept, final thumbnail, major visual direction, storyboard/assets, preview, final QA/cut, and post-publish learning. Ask before changing the core topic, audience promise, story angle, major approved script direction, overall visual style, narrator/voice direction, removing important scenes, spending money/credits, final credit-consuming render, or publishing. Routine reversible improvements should proceed, be logged, and be rechecked.
-
-## Honest capability boundary
-GitHub does not run the engines in the background or synchronize unsaved work. Each engine must have repository access and commit its changes. Never claim a HyperFrames project was composed or rendered unless the active integration confirms it. Never claim audio was repaired unless an audio tool actually processed it. Track asset sources and rights.
-
-## Reusable library
-- `templates/hyperframes/SCENE_TEMPLATE_LIBRARY.md`
-- `templates/hyperframes/ANIMATION_PATTERN_LIBRARY.md`
-- `templates/hyperframes/LONG_FORM_MASTER_TEMPLATE.md`
-- `templates/hyperframes/VISUAL_IDENTITY_PROPOSAL.md`
+## Resume
+Read the project state and relevant workflow files, continue from the single 30-second sample milestone, and do not redo completed setup or clone the same repositories again unless verification shows they are missing.
