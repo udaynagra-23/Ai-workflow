@@ -1,0 +1,111 @@
+name: ThinkVerse complex 30-second animation test
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "render/templates/thinkverse-complex-30s/index.html"
+      - ".github/workflows/thinkverse-complex-30s.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: thinkverse-complex-30s-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  render-and-validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      CI: "true"
+      HYPERFRAMES_NO_TELEMETRY: "1"
+      DO_NOT_TRACK: "1"
+      HYPERFRAMES_NO_UPDATE_CHECK: "1"
+      HYPERFRAMES_SKIP_SKILLS: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install media tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes ffmpeg
+          ffmpeg -version
+          ffprobe -version
+      - name: Verify HyperFrames
+        run: npx --yes hyperframes@0.9.19 --help
+      - name: Create isolated project and install GSAP
+        run: |
+          mkdir -p "$RUNNER_TEMP/complex-test"
+          npx --yes hyperframes@0.9.19 init "$RUNNER_TEMP/complex-test/project" --example blank --skip-skills
+          cd "$RUNNER_TEMP/complex-test/project"
+          npm install --no-save --no-package-lock gsap@3.12.5
+          cp node_modules/gsap/dist/gsap.min.js ./gsap.min.js
+          cp "$GITHUB_WORKSPACE/render/templates/thinkverse-complex-30s/index.html" ./index.html
+          test -s index.html && test -s gsap.min.js
+      - name: Install browser
+        working-directory: ${{ runner.temp }}/complex-test/project
+        run: |
+          npx --yes hyperframes@0.9.19 browser ensure
+          npx --yes hyperframes@0.9.19 browser path
+      - name: Lint and composition checks
+        working-directory: ${{ runner.temp }}/complex-test/project
+        run: |
+          npx --yes hyperframes@0.9.19 lint --json | tee "$RUNNER_TEMP/complex-test/lint.json"
+          npx --yes hyperframes@0.9.19 check --json | tee "$RUNNER_TEMP/complex-test/check.json"
+      - name: Render 30-second complex animation
+        working-directory: ${{ runner.temp }}/complex-test/project
+        run: |
+          npx --yes hyperframes@0.9.19 render --fps 30 --quality draft --strict --no-best-effort --output "$RUNNER_TEMP/complex-test/thinkverse-complex-30s.mp4"
+      - name: Validate video duration, resolution, frame rate and decode
+        run: |
+          test -s "$RUNNER_TEMP/complex-test/thinkverse-complex-30s.mp4"
+          ffprobe -v error -show_entries format=duration,size -show_entries stream=codec_type,codec_name,width,height,avg_frame_rate -of json "$RUNNER_TEMP/complex-test/thinkverse-complex-30s.mp4" | tee "$RUNNER_TEMP/complex-test/ffprobe.json"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const p=JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP+'/complex-test/ffprobe.json','utf8'));
+          const d=Number(p.format?.duration),v=(p.streams||[]).find(s=>s.codec_type==='video');
+          if(!Number.isFinite(d)||d<29||d>31) throw new Error('Expected ~30 seconds; got '+d);
+          if(!v||Number(v.width)!==1920||Number(v.height)!==1080) throw new Error('Expected 1920x1080');
+          if(!String(v.avg_frame_rate||'').startsWith('30/1')) throw new Error('Expected 30 fps');
+          console.log({duration:d,width:v.width,height:v.height,fps:v.avg_frame_rate,size:p.format.size});
+          NODE
+          ffmpeg -v error -i "$RUNNER_TEMP/complex-test/thinkverse-complex-30s.mp4" -f null -
+      - name: Sample frames and detect near-blank output
+        run: |
+          for t in 3 8 14 18 25 29; do
+            ffmpeg -hide_banner -loglevel error -ss "$t" -i "$RUNNER_TEMP/complex-test/thinkverse-complex-30s.mp4" -frames:v 1 "$RUNNER_TEMP/complex-test/frame-$t.png"
+            test -s "$RUNNER_TEMP/complex-test/frame-$t.png"
+          done
+          python3 - <<'PY'
+          import glob, statistics, subprocess
+          for f in sorted(glob.glob('/tmp/complex-test/frame-*.png')):
+              b=subprocess.check_output(['ffmpeg','-hide_banner','-loglevel','error','-i',f,'-frames:v','1','-f','rawvideo','-pix_fmt','gray','-'])
+              p=list(b)
+              spread=statistics.pstdev(p)
+              print(f, 'pixel_spread=',round(spread,2))
+              assert spread>8, 'Near-blank frame: '+f
+          PY
+      - name: Upload MP4 and visual QA frames
+        uses: actions/upload-artifact@v4
+        with:
+          name: thinkverse-complex-30s-test
+          path: |
+            ${{ runner.temp }}/complex-test/thinkverse-complex-30s.mp4
+            ${{ runner.temp }}/complex-test/ffprobe.json
+            ${{ runner.temp }}/complex-test/frame-*.png
+          if-no-files-found: error
+          retention-days: 5
+      - name: Write test summary
+        if: always()
+        run: |
+          {
+            echo "## ThinkVerse complex 30-second animation test"
+            echo "- HyperFrames 0.9.19 / GSAP 3.12.5"
+            echo "- 1920x1080 / 30 fps target"
+            echo "- Three timed scenes, character rig movement, map route animation, environmental motion, transitions and object interaction"
+            echo "- Narration intentionally omitted: no approved narration file was supplied for this isolated motion test"
+          } >> "$GITHUB_STEP_SUMMARY"
